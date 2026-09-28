@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Comprar Tickets VIP</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Script de Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4 class="mb-0">Final VIP - Compra de Entradas</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <form th:action="@{/tickets/comprar}" th:object="${ticketForm}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre Completo:</label>
+                            <input type="text" th:field="*{fullName}"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                                   placeholder="Ej. Juan Pérez">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Correo Electrónico:</label>
+                            <input type="email" th:field="*{email}"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                   placeholder="juan@ejemplo.com">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Cantidad de Tickets (Max 4):</label>
+                            <input type="number" th:field="*{quantity}"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('quantity')} ? 'is-invalid' : ''"
+                                   min="1" max="4">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
+                        </div>
+
+                        <!-- CAPTCHA -->
+                        <div class="mb-4 d-flex flex-column align-items-center">
+                            <div class="g-recaptcha" th:attr="data-sitekey=${siteKey}"></div>
+                            <!-- Mensaje de error del Captcha -->
+                            <div class="text-danger mt-2 small" th:if="${captchaError != null}" th:text="${captchaError}"></div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Confirmar Compra</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
